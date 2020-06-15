@@ -1,0 +1,4 @@
+index.html
+BH-logo.png
+./scripts/util.js
+./scripts/worker.js

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html manifest="manifest.mf"></html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <!-- FAVICON -->
+
+  <link rel="shortcut icon" href="BH-logo.png">
+  
+  <title>nQueens Solution</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <script src="./scripts/util.js"></script>
+  <script type="text/javascript">
+    function init() {
+      const localStorage = window.localStorage;
+      localStorage.clear();
+
+      const width = 30;
+      const offset = 20;
+      const canvas = document.getElementById("graph");
+      const context = canvas.getContext("2d");
+
+      function drawBoard(report, maxWidth, maxHeight) {
+        const { data } = report;
+        canvas.height = maxHeight;
+        canvas.width = maxWidth;
+        const label = [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+          "M",
+        ];
+        context.font = "bold 12px sans‑serif";
+        //context.textAlign = "start";
+        context.textBaseline = "middle";
+
+        data.map((item) => {
+          const x1 = item[report.x];
+          const y1 = item[report.y];
+          const fill_style =
+            ((x1 - offset) / width + (y1 - offset) / width) % 2 == 0
+              ? "rgba(150, 150, 250"
+              : "rgba(230, 230, 230";
+          context.fillStyle = fill_style;
+          context.fillRect(x1, y1, width, width);
+          context.fillStyle = "rgba(250, 0, 0, 0.9)";
+          if (x1 == offset) {
+            const indx = (y1 - offset) / width;
+            context.fillText(indx, offset / 4, y1 + (offset * 3) / 4);
+          }
+          if (y1 == offset) {
+            const indx = (x1 - offset) / width;
+            context.fillText(label[indx], x1 + offset / 2, offset / 2);
+          }
+        });
+      }
+
+      function paintOld(str1) {
+        const arr = str1.split(',')
+        while (arr.length) {
+          const y1 = parseInt(arr.pop());
+          const x1 = parseInt(arr.pop());
+          const fill_style =
+            (y1 + x1) % 2 == 0
+              ? "rgba(150, 150, 250)"
+              : "rgba(230, 230, 230)";
+
+          context.fillStyle = fill_style;
+          context.fillRect(offset + x1 * width, offset + y1 * width, width, width);
+        }
+      }
+
+      function paintIt(str) {
+        context.font = "bold 18px sans‑serif";
+        context.fillStyle = "rgba(250, 0, 0)";
+        const arr = str.split(',')
+        while (arr.length) {
+          const y = parseInt(arr.pop());
+          const x = parseInt(arr.pop());
+          context.fillText("Q", offset + x * width + 8, y * width + offset + 15);
+        }
+      }
+
+      function generateGraph(n) {
+        const data = [];
+        const obj = {};
+        const offset = 20;
+        const buffer = 30;
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            obj.top_left = j * buffer + offset;
+            obj.top_down = i * buffer + offset;
+            const obj1 = Object.assign({}, obj);
+            data.push(obj1);
+          }
+        }
+        const report = { x: "top_left", y: "top_down", data };
+        drawBoard(report, n * buffer + offset, n * buffer + offset);
+      }
+
+
+      document.getElementById("Btn").onclick = () => {
+
+        const myform = document.getElementById("login1");
+        myform.onsubmit = function () {
+          const n = myform.number.value;
+
+          generateGraph(n);
+
+          if (window.Worker) {
+            var myWorker = new Worker("./scripts/worker.js");
+            myWorker.postMessage(n);
+            myWorker.onmessage = (message) => {
+              showSolution(message.data);
+            };
+          }
+
+          function showSolution(result) {
+            let l = result.length;
+            for (let i = 0; i < l; i++) {
+              let key = `${i}`;
+              localStorage.setItem(key, result[i]);
+            }
+
+            document.getElementById(
+              "info"
+            ).innerHTML = ` There are ${l} solutions on ${n}x${n} Chess Board. `;
+            let addInfo = document.querySelector(".info1");
+            if (addInfo.childNodes[0]) {
+              addInfo.removeChild(addInfo.childNodes[0]);
+            }
+            let step = 0;
+            addInfo.innerHTML = ` To Show Solution ${++step}, Please Click: `;
+            let addButton = document.querySelector(".go");
+            if (addButton.childNodes[0]) {
+              addButton.removeChild(addButton.childNodes[0]);
+            }
+            var btn = {};
+            btn = document.createElement("button");
+            btn.innerHTML = "START";
+            addButton.appendChild(btn);
+            btn.addEventListener("click", () => {
+              const key0 = localStorage.key(0);
+              const key1 = localStorage.key(1);
+              if (localStorage.length > 1 && step === 1) {
+                paintIt(localStorage.getItem(key0));
+              }
+              if (localStorage.length > 1 && step > 1) {
+                paintOld(localStorage.getItem(key0));
+                paintIt(localStorage.getItem(key1));
+                localStorage.removeItem(key0);
+              }
+              addInfo.innerHTML = ` To Show Solution ${++step}, Please Click: `;
+              if (localStorage.length == 1) {
+                localStorage.clear();
+                btn.disabled = true
+              }
+            });
+          }
+
+          return false;
+        }
+
+      };
+    }
+  </script>
+  <style type="text/css">
+    header>h1 {
+      -webkit-text-fill-color: blue;
+      -webkit-text-stroke-color: rgb(252, 252, 248);
+      -webkit-text-stroke-width: 0.5px;
+      background: linear-gradient(to bottom,
+          #fc340b 0%,
+          #ffffff 50%,
+          #fc340b 100%);
+    }
+
+    input[type="number"] {
+      background: rgba(150, 30, 30, 0.5);
+    }
+  </style>
+</head>
+
+<body onload="init()">
+  <header>
+    <h1>nQueens Presentation</h1>
+  </header>
+  <main>
+    <section class="myForm">
+      <span></span>
+      <form id="login1" style="border: 1px dotted #000; border-radius: 3px;">
+        <label for="number">Please Enter NxN ChessBoard:</label>
+        <input type="number" id="number" name="number" max="12" min="4" />
+        <button id="Btn" type="submit">Submit</button>
+      </form>
+    </section>
+
+    <section>
+      <canvas id="graph"></canvas>
+    </section>
+    <section class="info">
+      <span id="info"></span>
+    </section>
+    <section><span class="info1"></span><span class="go"></span></section>
+  </main>
+</body>
+
+</html>
