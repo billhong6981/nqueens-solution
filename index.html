@@ -2,12 +2,53 @@
 <html manifest="manifest.mf"></html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
   <!-- FAVICON -->
 
-  <link rel="shortcut icon" href="BH-logo.png">
+  <link rel="icon" href="./BH-logo.png">
   
   <title>nQueens Solution</title>
+
+  <style type="text/css">
+
+    header { 
+      width: 50%; 
+      background-image: url("./BH-logo.png");
+      background-repeat: no-repeat;
+    }
+
+    form { width: 50%; }
+
+    @media screen and (max-width: width 640px) {
+      header {
+        width: 100%; 
+        background-image: url("./BH-logo.png");
+        background-repeat: no-repeat;
+        }
+      form { width: 100%; }
+    }
+
+    h1 {
+      -webkit-text-fill-color: blue;
+      -webkit-text-stroke-color: rgb(252, 252, 248);
+      -webkit-text-stroke-width: 0.5px;
+      background: linear-gradient(to bottom,
+          #fc340b 0%,
+          #ffffff 50%,
+          #fc340b 100%);
+    }
+
+    form {
+      border: 1px dotted #000; 
+      border-radius: 3px;
+    }
+
+    input[type="number"] {
+      background: rgba(150, 30, 30, 0.5);
+    }
+  </style>
   
   <script src="./scripts/util.js"></script>
   <script type="text/javascript">
@@ -114,8 +155,6 @@
         myform.onsubmit = function () {
           const n = myform.number.value;
 
-          generateGraph(n);
-
           if (window.Worker) {
             var myWorker = new Worker("./scripts/worker.js");
             myWorker.postMessage(n);
@@ -123,6 +162,8 @@
               showSolution(message.data);
             };
           }
+
+          generateGraph(n);
 
           function showSolution(result) {
             let l = result.length;
@@ -173,32 +214,18 @@
       };
     }
   </script>
-  <style type="text/css">
-    header>h1 {
-      -webkit-text-fill-color: blue;
-      -webkit-text-stroke-color: rgb(252, 252, 248);
-      -webkit-text-stroke-width: 0.5px;
-      background: linear-gradient(to bottom,
-          #fc340b 0%,
-          #ffffff 50%,
-          #fc340b 100%);
-    }
-
-    input[type="number"] {
-      background: rgba(150, 30, 30, 0.5);
-    }
-  </style>
+  
 </head>
 
 <body onload="init()">
   <header>
-    <h1>nQueens Presentation</h1>
+    <h1>&nbsp nQueens Presentation</h1>
   </header>
   <main>
     <section class="myForm">
       <span></span>
-      <form id="login1" style="border: 1px dotted #000; border-radius: 3px;">
-        <label for="number">Please Enter NxN ChessBoard:</label>
+      <form id="login1" >
+        <label for="number">&nbsp Please Enter NxN ChessBoard:</label>
         <input type="number" id="number" name="number" max="12" min="4" />
         <button id="Btn" type="submit">Submit</button>
       </form>
