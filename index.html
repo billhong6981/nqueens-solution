@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html manifest="manifest.mf"></html>
+<html manifest="manifest.mf">
+
+</html>
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,26 +10,31 @@
   <!-- FAVICON -->
 
   <link rel="icon" href="./BH-logo.png">
-  
+
   <title>nQueens Solution</title>
 
   <style type="text/css">
 
-    header { 
-      width: 50%; 
+    header {
+      width: 50%;
       background-image: url("./BH-logo.png");
       background-repeat: no-repeat;
     }
 
-    form { width: 50%; }
+    form {
+      width: 50%;
+    }
 
     @media screen and (max-width: width 640px) {
       header {
-        width: 100%; 
+        width: 100%;
         background-image: url("./BH-logo.png");
         background-repeat: no-repeat;
-        }
-      form { width: 100%; }
+      }
+
+      form {
+        width: 100%;
+      }
     }
 
     h1 {
@@ -41,7 +48,7 @@
     }
 
     form {
-      border: 1px dotted #000; 
+      border: 1px dotted #000;
       border-radius: 3px;
     }
 
@@ -49,12 +56,11 @@
       background: rgba(150, 30, 30, 0.5);
     }
   </style>
-  
+
   <script src="./scripts/util.js"></script>
   <script type="text/javascript">
     function init() {
       const localStorage = window.localStorage;
-      localStorage.clear();
 
       const width = 30;
       const offset = 20;
@@ -155,6 +161,8 @@
         myform.onsubmit = function () {
           const n = myform.number.value;
 
+          localStorage.clear();
+
           if (window.Worker) {
             var myWorker = new Worker("./scripts/worker.js");
             myWorker.postMessage(n);
@@ -164,7 +172,7 @@
           }
 
           generateGraph(n);
-
+          
           function showSolution(result) {
             let l = result.length;
             for (let i = 0; i < l; i++) {
@@ -214,7 +222,7 @@
       };
     }
   </script>
-  
+
 </head>
 
 <body onload="init()">
@@ -224,7 +232,7 @@
   <main>
     <section class="myForm">
       <span></span>
-      <form id="login1" >
+      <form id="login1">
         <label for="number">&nbsp Please Enter NxN ChessBoard:</label>
         <input type="number" id="number" name="number" max="12" min="4" />
         <button id="Btn" type="submit">Submit</button>

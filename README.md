@@ -3,7 +3,7 @@
 
 * This web app was written in pure combination of HTML5, CSS3, Javascript.
 
-* Thanks to the now modern Browser, we can make a app like running in those days in 1990s pc desktop era. powerful of HTML5, I use localStorage to save data, use Web Worker to process data in the backgroud, known as javescript concurrent or multi-thread processing.
+* Thanks to the now modern Browser, we can make a app like running in those days in 1990s pc desktop era. powerful of HTML5, I use localStorage to save data, use Web Worker to process data in the backgroud, known as javescript concurrency or multi-thread processing.
 
 * The app completely work on client side, no install required, just run index.html.
 
