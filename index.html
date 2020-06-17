@@ -61,6 +61,7 @@
   <script type="text/javascript">
     function init() {
       const localStorage = window.localStorage;
+      localStorage.clear();
 
       const width = 30;
       const offset = 20;
@@ -157,12 +158,12 @@
 
       document.getElementById("Btn").onclick = () => {
 
+        localStorage.clear();
         const myform = document.getElementById("login1");
         myform.onsubmit = function () {
           const n = myform.number.value;
-
-          localStorage.clear();
-
+          generateGraph(n);
+          
           if (window.Worker) {
             var myWorker = new Worker("./scripts/worker.js");
             myWorker.postMessage(n);
@@ -171,8 +172,6 @@
             };
           }
 
-          generateGraph(n);
-          
           function showSolution(result) {
             let l = result.length;
             for (let i = 0; i < l; i++) {
