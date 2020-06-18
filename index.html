@@ -66,7 +66,7 @@
   <script type="text/javascript">
     function init() {
       const localStorage = window.localStorage;
-      localStorage.clear();
+      // localStorage.clear();
 
       const width = 30;
       const offset = 20;
@@ -163,7 +163,6 @@
 
       document.getElementById("Btn").onclick = () => {
 
-        localStorage.clear();
         const myform = document.getElementById("login1");
         myform.onsubmit = function () {
           const n = myform.number.value;
@@ -178,6 +177,7 @@
           }
 
           function showSolution(result) {
+            localStorage.clear();
             let l = result.length;
             for (let i = 0; i < l; i++) {
               let key = `${i}`;
@@ -214,7 +214,7 @@
               }
               addInfo.innerHTML = ` To Show Solution ${++step}, Please Click: `;
               if (localStorage.length == 1) {
-                localStorage.clear();
+                // localStorage.clear();
                 btn.disabled = true
               }
             });
